@@ -3,9 +3,9 @@ require 'open-uri'
 
 class Scraper
 
-	def scrape
+	def scrape(url)
 		#http://leaguepedia.com/wiki/IGN_ProLeague_Season_5/Picks_and_Bans
-		doc = Nokogiri::HTML(File.open('lol.html'))
+		doc = Nokogiri::HTML(open(url))
 
 		#p doc.css('table tr td	')
 		doc.css('center table tr').map do |tr|

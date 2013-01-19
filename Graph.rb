@@ -2,6 +2,10 @@ require 'RMagick'
 include Magick
 
 class Graph
+	def initialize(url)
+		@url = url
+	end
+
 	def draw(champions, name)
 		header_h = 100
 		champion_h = 20
@@ -90,7 +94,7 @@ class Graph
 		img_f = Image.new(@img.columns, h)
 
 		gc = Draw.new
-		gc.annotate(img_f, 0 ,0 , 30, 50, "Source: http://leaguepedia.com/wiki/IGN_ProLeague_Season_5/Picks_and_Bans#Bracket_Stage") {
+		gc.annotate(img_f, 0 ,0 , 30, 50, "Source: " + @url) {
 			self.pointsize = 14
 			self.fill = "black"
 		}

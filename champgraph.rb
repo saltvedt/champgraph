@@ -3,11 +3,12 @@ require_relative 'Champion'
 require_relative 'Graph'
 
 s = Scraper.new
-champions = s.scrape
+url = ARGV[0]
+champions = s.scrape(url)
 
 champions.keep_if { |c| c.name != "" }
 
-d = Graph.new
+d = Graph.new(url)
 champions.keep_if { |c| c.picks + c.bans > 0 }
 
 champions.sort! { |a, b| b.picks+b.bans <=> a.picks+a.bans }
