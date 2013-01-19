@@ -4,11 +4,14 @@ require_relative 'Graph'
 
 s = Scraper.new
 url = ARGV[0]
-champions = s.scrape(url)
+title = s.scrape_title(url)
+title = title.gsub(/\s+/, '') # Get rid of whitespace
+title = title.gsub(/\//, '')  # And forward slash
+champions = s.scrape_champions(url)
 
 champions.keep_if { |c| c.name != "" }
 
-d = Graph.new(url)
+d = Graph.new(title, url)
 champions.keep_if { |c| c.picks + c.bans > 0 }
 
 champions.sort! { |a, b| b.picks+b.bans <=> a.picks+a.bans }
@@ -23,6 +26,7 @@ d.draw(champions, "ByWins")
 champions.sort! { |a, b| b.losses <=> a.losses }
 d.draw(champions, "ByLosses")
 
+# Hack to avoid division by zero error.
 def div(x, y)
 	if y == 0 then 
 		return 1000000+x

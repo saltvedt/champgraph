@@ -3,13 +3,11 @@ require 'open-uri'
 
 class Scraper
 
-	def scrape(url)
-		#http://leaguepedia.com/wiki/IGN_ProLeague_Season_5/Picks_and_Bans
+	# Returns an array of Champions
+	def scrape_champions(url)
 		doc = Nokogiri::HTML(open(url))
 
-		#p doc.css('table tr td	')
 		doc.css('center table tr').map do |tr|
-			#p tr.inspect
 			name = tr.css('td a:nth-child(2)').text.strip
 			bans = tr.css('td:nth-child(2)').text.strip.to_i
 			picks = tr.css('td:nth-child(3)').text.strip.to_i
@@ -17,6 +15,12 @@ class Scraper
 			losses = tr.css('td:nth-child(5)').text.strip.to_i
 			Champion.new(name, bans, picks, wins, losses)
 		end
+	end
+
+	def scrape_title(url)
+		doc = Nokogiri::HTML(open(url))
+
+		doc.css('#firstHeading').text
 	end
 
 end

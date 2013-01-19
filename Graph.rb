@@ -2,7 +2,8 @@ require 'RMagick'
 include Magick
 
 class Graph
-	def initialize(url)
+	def initialize(title, url)
+		@title = title
 		@url = url
 	end
 
@@ -27,8 +28,14 @@ class Graph
 		
 		@img = @img.composite(footer(header_h), margin_left, h-footer_h, Magick::OverCompositeOp)
 
-		@img.write('graphs/' + name + '.png')
+		graphs_directory = 'graphs/' + @title
+		if !File.directory?(graphs_directory) 
+			Dir.mkdir(graphs_directory, 0755)
+		end
+		@img.write(graphs_directory + '/' + name + '.png')
 	end
+
+	private
 
 	def header(name, h)
 		#legends, todo
