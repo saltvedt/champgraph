@@ -4,13 +4,11 @@ require_relative 'Graph'
 
 url = ARGV[0]
 
-s = Scraper.new
-title = s.scrape_title(url)
-title = title.gsub(/\s+/, '') # Get rid of whitespace
-title = title.gsub(/\//, '')  # And forward slash
+s = Scraper.new(url)
+title = s.scrape_title
 
 puts "Scraping URL"
-champions = s.scrape_champions(url)
+champions = s.scrape_champions
 
 champions.keep_if { |c| c.valid }
 
