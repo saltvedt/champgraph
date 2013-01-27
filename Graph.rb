@@ -2,9 +2,10 @@ require 'RMagick'
 include Magick
 
 class Graph
-	def initialize(title, url)
+	def initialize(title, url, graph_width)
 		@title = title
 		@url = url
+		@graph_width = graph_width
 	end
 
 	def draw(champions, name)
@@ -15,6 +16,7 @@ class Graph
 
 		w = 900
 		h = header_h + champion_h * champions.count + footer_h
+		champion_w = ((w-150)/@graph_width).floor
 
 		@img = Image.new(w, h)
 
@@ -22,7 +24,7 @@ class Graph
 
 		offset = header_h
 		champions.each do |c|
-			@img = @img.composite(champ(c), margin_left, offset, Magick::OverCompositeOp)
+			@img = @img.composite(champ(c, champion_w), margin_left, offset, Magick::OverCompositeOp)
 			offset += champion_h
 		end
 		
@@ -66,7 +68,7 @@ class Graph
 		return img_h
 	end
 
-	def champ(champ)
+	def champ(champ, factor)
 		img_c = Image.new(@img.columns, 20)
 
 		gc = Draw.new
@@ -75,7 +77,6 @@ class Graph
 			self.fill = "#000000"
 		}
 
-		factor = 10
 		top_margin = 5
 		bot_margin = 15
 		text_margin = 125

@@ -14,7 +14,16 @@ champions.keep_if { |c| c.valid }
 
 champions.keep_if { |c| c.were_picked_or_banned }
 
-graph = Graph.new(title, url)
+most_used = Champion.new(nil, 0, 0, 0, 0)
+champions.each { |c| 
+	if most_used.picks_and_bans < c.picks_and_bans
+		most_used = c
+	end
+}
+
+graph_width = most_used.picks_and_bans
+
+graph = Graph.new(title, url, graph_width)
 
 puts "Creating image ByPicksAndBans"
 champions.sort! { |a, b| b.picks_and_bans <=> a.picks_and_bans }
