@@ -15,11 +15,11 @@ class Champion
 	end
 
 	def win_to_loss_ratio
-		div(@wins, @picks)
+		ratio(@wins, @losses)
 	end
 
 	def picks_to_bans_ratio
-		div(@picks, @bans)
+		ratio(@picks, @bans)
 	end
 
 	def valid
@@ -41,13 +41,14 @@ class Champion
 
 	private
 
-	# Ugly hack to avoid division by zero error.
-	def div(x, y)
-		if y == 0 then 
-			return 1000000+x
+	# Ugly hack to avoid division by zero
+	def ratio(x, y)
+		if y == 0
+			return x+1000
 		end
-		if x == 0 then
-			return 0-y
+
+		if x == 0
+			return y-1000
 		end
 
 		return x/y
