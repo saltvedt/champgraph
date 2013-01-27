@@ -40,7 +40,6 @@ class Graph
 	private
 
 	def header(name, h)
-		#legends, todo
 		img_h = Image.new(@img.columns, h)
 
 		gc = Draw.new
@@ -84,21 +83,34 @@ class Graph
 		losses_end = wins_end + champ.losses * factor
 		bans_end = losses_end + champ.bans * factor
 
-		gc.fill('green')
-		gc.rectangle(text_margin, top_margin, wins_end, bot_margin)
+		if champ.wins > 0
+			gc.fill('#2b2')
+			gc.rectangle(text_margin, top_margin, wins_end, bot_margin)
+		end
 
-		gc.fill('red')
-		gc.rectangle(wins_end, top_margin, losses_end, bot_margin)
+		if champ.losses > 0
+			gc.fill('#b22')
+			gc.rectangle(wins_end, top_margin, losses_end, bot_margin)
+		end
 
-		gc.fill('black')
-		gc.rectangle(losses_end, top_margin, bans_end, bot_margin)
+		if champ.bans > 0
+			gc.fill('#222')
+			gc.rectangle(losses_end, top_margin, bans_end, bot_margin)		
+		end
+
+		ticks_colour = '#fff'
+
+		(0..champ.picks_and_bans*factor).step(factor).to_a.each { |x|
+			gc.fill(ticks_colour)
+			gc.rectangle((text_margin+x)-1, top_margin, (text_margin+x), bot_margin)
+		}
 
 		gc.draw(img_c)
+
 		return img_c
 	end
 
 	def footer(h)
-		#legends, todo
 		img_f = Image.new(@img.columns, h)
 
 		gc = Draw.new
