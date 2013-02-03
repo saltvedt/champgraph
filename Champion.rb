@@ -43,14 +43,18 @@ class Champion
 
 	# Ugly hack to avoid division by zero
 	def ratio(x, y)
-		if y == 0
+		if (x == 0) and (y == 0) then
+			return 0
+		end
+
+		if (y == 0) then
 			return x+1000
 		end
 
-		if x == 0
-			return y-1000
+		if x == 0 then
+			return 0-y
 		end
 
-		return x/y
+		return (x/y).to_f
 	end
 end
