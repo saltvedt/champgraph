@@ -2,10 +2,11 @@ require 'RMagick'
 include Magick
 
 class Graph
-	def initialize(title, url, graph_width)
+	def initialize(title, url, graph_width, short_name)
 		@title = title
 		@url = url
 		@graph_width = graph_width
+		@short_name = short_name
 	end
 
 	def draw(champions, name)
@@ -30,7 +31,7 @@ class Graph
 		
 		@img = @img.composite(footer(header_h), margin_left, h-footer_h, Magick::OverCompositeOp)
 
-		graphs_directory = 'graphs/' + @title
+		graphs_directory = 'data/' + @short_name
 		if !File.directory?(graphs_directory) 
 			Dir.mkdir(graphs_directory, 0755)
 		end

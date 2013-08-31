@@ -10,6 +10,16 @@ class Champion
 		@losses = losses
 	end
 
+	# Add anothers champions stats to this one 
+	def add(champion)
+		if @name = champion.name
+			@bans 	+= champion.bans
+			@picks 	+= champion.picks
+			@wins 	+= champion.wins
+			@losses += champion.losses
+		end
+	end
+
 	def picks_and_bans
 		@picks + @bans
 	end
@@ -37,6 +47,10 @@ class Champion
 	def to_s
 		sep = " - "
 		@name + sep + @bans.to_s + sep + @picks.to_s + sep + @wins.to_s + sep + @losses.to_s
+	end
+
+	def to_a
+		[@name, @bans.to_s, @picks.to_s, @wins.to_s, @losses.to_s]
 	end
 
 	private
