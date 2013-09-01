@@ -101,10 +101,13 @@ class Graph
 
 		ticks_colour = '#fff'
 
-		(0..champ.picks_and_bans*factor).step(factor).to_a.each { |x|
-			gc.fill(ticks_colour)
-			gc.rectangle((text_margin+x)-1, top_margin, (text_margin+x), bot_margin)
-		}
+		# if the number of picks and bans of a champion is too high, the ticks will overwrite the bars
+		if @graph_width < 100
+			(0..champ.picks_and_bans*factor).step(factor).to_a.each { |x|
+				gc.fill(ticks_colour)
+				gc.rectangle((text_margin+x)-1, top_margin, (text_margin+x), bot_margin)
+			}
+		end
 
 		gc.draw(img_c)
 
