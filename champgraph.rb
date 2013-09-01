@@ -57,20 +57,48 @@ def write_graphs(champions)
 	@graph.draw(champions, "ByPicksToBansRatio")
 end
 
+def merge_champion_stats(champions)
+	new_champ_stats = []
+
+	champion_names = champions.map do |c|
+		c.name
+	end
+
+	champion_names.uniq!
+
+	champion_names.each do |name|
+		champion_stats = champions.select { |c| c.name == name }
+
+		picks = 0
+		champion_stats.each { |c| picks += c.picks }
+
+		wins = 0
+		champion_stats.each { |c| wins += c.wins }
+
+		losses = 0
+		champion_stats.each { |c| losses += c.losses }
+
+		bans = 0
+		champion_stats.each { |c| bans += c.bans }
+
+		new_champ_stats += [Champion.new(name, bans, picks, wins, losses)]
+	end
+
+	return new_champ_stats
+end
+
 Jobs.jobs.each do |key, job|
-	champion_stats = []
+	all_champion_stats = []
 
 	job[:urls].each do |url|
 		@s = Scraper.new(url)
 
 		champions = get_champions(url)
-		champion_stats = champions
+		all_champion_stats += champions
 	end
 
 	# TODO: ADD TOGETHER CHAMPION STATS
-	#champion_stats.each do |champs|
-	#	final_champ_stats += champs
-	#end
+	champion_stats = merge_champion_stats(all_champion_stats)
 
 	# Save job data in csv
 	if !File.directory?("data/" + job[:short_name]) 
