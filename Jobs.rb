@@ -49,7 +49,7 @@ class Jobs
 				:urls => eu_lcs_summer_playoffs
 			},
 			:eu_lcs => {
-				:name => "EU LCS Summer Season",
+				:name => "EU LCS All Games",
 				:urls => eu_lcs
 			},
 			# NA
@@ -74,7 +74,7 @@ class Jobs
 				:urls => na_lcs_summer_playoffs
 			},
 			:na_lcs => {
-				:name => "NA LCS",
+				:name => "NA LCS All Games",
 				:urls => na_lcs
 			},
 			# ALL
