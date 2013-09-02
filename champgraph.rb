@@ -5,7 +5,7 @@ require_relative 'Jobs'
 require 'csv'
 
 def get_champions(url)
-	puts "Scraping URL"
+	puts "Scraping URL #{url}"
 	champions = @s.scrape_champions
 
 	champions.keep_if { |c| c.valid }
@@ -25,36 +25,43 @@ def get_most_used_champion(champions)
 	return most_used
 end
 
-def write_graphs(champions)
-	puts "Creating image ByPicksAndBans"
+def write_graphs(name, champions)
+	title = "#{name}: Ordered by picks and bans"
+	puts "Drawing " + title
 	champions.sort! { |a, b| b.picks_and_bans <=> a.picks_and_bans }
-	@graph.draw(champions, "ByPicksAndBans")
+	@graph.draw(champions, "by_picks_and_bans", title)
 
-	puts "Creating image ByPicks"
+	title = "#{name}: Ordered by picks"
+	puts "Drawing " + title
 	champions.sort! { |a, b| b.picks <=> a.picks }
-	@graph.draw(champions, "ByPicks")
+	@graph.draw(champions, "by_picks", title)
 
-	puts "Creating image ByWins"
+	title = "#{name}: Ordered by wins"
+	puts "Drawing " + title
 	champions.sort! { |a, b| b.wins <=> a.wins }
-	@graph.draw(champions, "ByWins")
+	@graph.draw(champions, "by_wins", title)
 
-	puts "Creating image ByLosses"
+	title = "#{name}: Ordered by losses"
+	puts "Drawing " + title
 	champions.sort! { |a, b| b.losses <=> a.losses }
-	@graph.draw(champions, "ByLosses")
+	@graph.draw(champions, "by_losses", title)
 
-	puts "Creating image ByWinToLossRatio"
-	champions.sort! { |a, b| b.win_to_loss_ratio <=> a.win_to_loss_ratio }
-	@graph.draw(champions, "ByWinToLossRatio")
+	#title = "#{name}: Ordered by picks and bans"
+	#puts "Drawing " + title
+	#champions.sort! { |a, b| b.win_to_loss_ratio <=> a.win_to_loss_ratio }
+	#@graph.draw(champions, "ByWinToLossRatio", title)
 
 	champions.keep_if { |c| c.were_banned }
 
-	puts "Creating image ByBans"
+	title = "#{name}: Ordered by bans"
+	puts "Drawing " + title
 	champions.sort! { |a, b| b.bans <=> a.bans }
-	@graph.draw(champions, "ByBans")
+	@graph.draw(champions, "by_bans", title)
 
-	puts "Creating image ByPicksToBansRatio"
-	champions.sort! { |a, b| b.picks_to_bans_ratio <=> a.picks_to_bans_ratio }
-	@graph.draw(champions, "ByPicksToBansRatio")
+	#title = "#{name}: By picks and bans"
+	#puts "Drawing " + title
+	#champions.sort! { |a, b| b.picks_to_bans_ratio <=> a.picks_to_bans_ratio }
+	#@graph.draw(champions, "ByPicksToBansRatio", title)
 end
 
 def merge_champion_stats(champions)
@@ -97,15 +104,14 @@ Jobs.jobs.each do |key, job|
 		all_champion_stats += champions
 	end
 
-	# TODO: ADD TOGETHER CHAMPION STATS
 	champion_stats = merge_champion_stats(all_champion_stats)
 
 	# Save job data in csv
-	if !File.directory?("data/" + job[:short_name]) 
-		Dir.mkdir("data/" + job[:short_name], 0755)
+	if !File.directory?("data/" + key.to_s) 
+		Dir.mkdir("data/" + key.to_s, 0755)
 	end
 
-	CSV.open("data/" + job[:short_name] + "/data.csv", "wb") do |csv|
+	CSV.open("data/" + key.to_s + "/data.csv", "wb") do |csv|
 		champion_stats.each do |c|
 			csv << c.to_a
 		end
@@ -116,7 +122,7 @@ Jobs.jobs.each do |key, job|
 
 	graph_width = most_used.picks_and_bans
 
-	@graph = Graph.new(job[:name], job[:urls][0], graph_width, job[:short_name])
+	@graph = Graph.new(job[:name], job[:urls][0], graph_width, key.to_s)
 
-	write_graphs(champion_stats)
+	write_graphs(job[:name], champion_stats)
 end
