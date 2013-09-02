@@ -9,7 +9,7 @@ class Graph
 		@short_name = short_name
 	end
 
-	def draw(champions, name)
+	def draw(champions, filename, title)
 		header_h = 100
 		champion_h = 20
 		footer_h = 100
@@ -17,11 +17,11 @@ class Graph
 
 		w = 900
 		h = header_h + champion_h * champions.count + footer_h
-		champion_w = ((w-150)/@graph_width).floor
+		champion_w = ((w-220)/@graph_width).floor
 
 		@img = Image.new(w, h)
 
-		@img = @img.composite(header(name, header_h), margin_left, 0, Magick::OverCompositeOp)
+		@img = @img.composite(header(title, header_h), margin_left, 0, Magick::OverCompositeOp)
 
 		offset = header_h
 		champions.each do |c|
@@ -35,7 +35,7 @@ class Graph
 		if !File.directory?(graphs_directory) 
 			Dir.mkdir(graphs_directory, 0755)
 		end
-		@img.write(graphs_directory + '/' + name + '.png')
+		@img.write(graphs_directory + '/' + filename + '.png')
 	end
 
 	private
@@ -72,14 +72,17 @@ class Graph
 		img_c = Image.new(@img.columns, 20)
 
 		gc = Draw.new
-		gc.annotate(img_c, 0 ,0 , 0, 15, champ.name) {
+
+		champion_text = "#{champ.name} (#{champ.wins}, #{champ.losses}, #{champ.bans})"
+
+		gc.annotate(img_c, 0 ,0 , 0, 15, champion_text) {
 			self.pointsize = 16
 			self.fill = "#000000"
 		}
 
 		top_margin = 5
 		bot_margin = 15
-		text_margin = 125
+		text_margin = 200
 		wins_end = text_margin + champ.wins * factor
 		losses_end = wins_end + champ.losses * factor
 		bans_end = losses_end + champ.bans * factor
