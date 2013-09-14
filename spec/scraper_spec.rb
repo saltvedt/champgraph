@@ -9,7 +9,7 @@ describe Scraper do
 			s = Scraper.new(path)
 			champion_stats = s.scrape_champions
 			champion_stats.each do |c|
-				c.should be_a_kind_of(Champion)
+				expect(c).to be_a_kind_of(Champion)
 			end
 		end
 	end

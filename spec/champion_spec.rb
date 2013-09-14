@@ -44,11 +44,11 @@ describe Champion do
 
 	describe ".ratio" do
 		it "returns a float" do
-			Champion::ratio(1,1).should be_a_kind_of(Float)
-			Champion::ratio(1,0).should be_a_kind_of(Float)
-			Champion::ratio(0,1).should be_a_kind_of(Float)
-			Champion::ratio(5,3).should be_a_kind_of(Float)
-			Champion::ratio(3,5).should be_a_kind_of(Float)
+			expect(Champion::ratio(1,1)).to be_a_kind_of(Float)
+			expect(Champion::ratio(1,0)).to be_a_kind_of(Float)
+			expect(Champion::ratio(0,1)).to be_a_kind_of(Float)
+			expect(Champion::ratio(5,3)).to be_a_kind_of(Float)
+			expect(Champion::ratio(3,5)).to be_a_kind_of(Float)
 		end
 
 		it "returns 1 when dividend and numerator are equal" do
