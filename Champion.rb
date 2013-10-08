@@ -3,10 +3,10 @@ class Champion
 
     def initialize(name, bans, picks, wins, losses)
         @name = name
-        @bans = bans
-        @picks = picks
-        @wins = wins
-        @losses = losses
+        @bans = bans.to_i
+        @picks = picks.to_i
+        @wins = wins.to_i
+        @losses = losses.to_i
     end
 
     # Add anothers champions stats to this one
